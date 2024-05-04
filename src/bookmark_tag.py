@@ -11,14 +11,14 @@ from typing import List
 from .bookmark_response import BookmarkResponse
 from .fields import Fields
 from .single_tweet import SingleTweet
-from .tweet_collection_response import TweetCollectionResponse
+from .tweet_collection import TweetCollection
 
 class BookmarkTag(sdkgen.TagAbstract):
     def __init__(self, http_client: requests.Session, parser: sdkgen.Parser):
         super().__init__(http_client, parser)
 
 
-    def get_all(self, user_id: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollectionResponse:
+    def get_all(self, user_id: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollection:
         """
         Allows you to get an authenticated user&#039;s 800 most recent bookmarked Tweets.
         """
@@ -42,7 +42,7 @@ class BookmarkTag(sdkgen.TagAbstract):
             response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
 
             if response.status_code >= 200 and response.status_code < 300:
-                return TweetCollectionResponse.model_validate_json(json_data=response.content)
+                return TweetCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")

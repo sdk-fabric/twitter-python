@@ -9,14 +9,14 @@ from requests import RequestException
 from typing import List
 
 from .fields import Fields
-from .tweet_collection_response import TweetCollectionResponse
+from .tweet_collection import TweetCollection
 
 class SearchTag(sdkgen.TagAbstract):
     def __init__(self, http_client: requests.Session, parser: sdkgen.Parser):
         super().__init__(http_client, parser)
 
 
-    def get_recent(self, query: str, start_time: str, end_time: str, since_id: str, until_id: str, sort_order: str, expansions: str, max_results: int, fields: Fields) -> TweetCollectionResponse:
+    def get_recent(self, query: str, start_time: str, end_time: str, since_id: str, until_id: str, sort_order: str, expansions: str, max_results: int, fields: Fields) -> TweetCollection:
         try:
             path_params = {}
 
@@ -41,7 +41,7 @@ class SearchTag(sdkgen.TagAbstract):
             response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
 
             if response.status_code >= 200 and response.status_code < 300:
-                return TweetCollectionResponse.model_validate_json(json_data=response.content)
+                return TweetCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")

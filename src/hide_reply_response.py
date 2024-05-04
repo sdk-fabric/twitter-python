@@ -6,7 +6,7 @@ https://sdkgen.app
 from pydantic import BaseModel, Field, GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
-from .hide_reply_update import HideReplyUpdate
+from .hide_reply import HideReply
 class HideReplyResponse(BaseModel):
-    data: Optional[HideReplyUpdate] = Field(default=None, alias="data")
+    data: Optional[HideReply] = Field(default=None, alias="data")
     pass

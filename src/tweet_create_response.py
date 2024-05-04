@@ -6,7 +6,7 @@ https://sdkgen.app
 from pydantic import BaseModel, Field, GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
-from .tweet_create_response_message import TweetCreateResponseMessage
+from .tweet_create import TweetCreate
 class TweetCreateResponse(BaseModel):
-    data: Optional[TweetCreateResponseMessage] = Field(default=None, alias="data")
+    data: Optional[TweetCreate] = Field(default=None, alias="data")
     pass

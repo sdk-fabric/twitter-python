@@ -11,14 +11,15 @@ from typing import List
 from .fields import Fields
 from .like_response import LikeResponse
 from .single_tweet import SingleTweet
-from .tweet_collection_response import TweetCollectionResponse
+from .tweet_collection import TweetCollection
+from .user_collection import UserCollection
 
 class UserTag(sdkgen.TagAbstract):
     def __init__(self, http_client: requests.Session, parser: sdkgen.Parser):
         super().__init__(http_client, parser)
 
 
-    def get_timeline(self, user_id: str, start_time: str, end_time: str, since_id: str, until_id: str, exclude: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollectionResponse:
+    def get_timeline(self, user_id: str, start_time: str, end_time: str, since_id: str, until_id: str, exclude: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollection:
         try:
             path_params = {}
             path_params["user_id"] = user_id
@@ -44,14 +45,14 @@ class UserTag(sdkgen.TagAbstract):
             response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
 
             if response.status_code >= 200 and response.status_code < 300:
-                return TweetCollectionResponse.model_validate_json(json_data=response.content)
+                return TweetCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
         except RequestException as e:
             raise sdkgen.ClientException("An unknown error occurred: " + str(e))
 
-    def get_liked_tweets(self, user_id: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollectionResponse:
+    def get_liked_tweets(self, user_id: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollection:
         """
         Tweets liked by a user
         """
@@ -75,7 +76,7 @@ class UserTag(sdkgen.TagAbstract):
             response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
 
             if response.status_code >= 200 and response.status_code < 300:
-                return TweetCollectionResponse.model_validate_json(json_data=response.content)
+                return TweetCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
@@ -124,6 +125,32 @@ class UserTag(sdkgen.TagAbstract):
 
             if response.status_code >= 200 and response.status_code < 300:
                 return LikeResponse.model_validate_json(json_data=response.content)
+
+
+            raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
+        except RequestException as e:
+            raise sdkgen.ClientException("An unknown error occurred: " + str(e))
+
+    def find_by_name(self, usernames: str, expansions: str, fields: Fields) -> UserCollection:
+        try:
+            path_params = {}
+
+            query_params = {}
+            query_params["usernames"] = usernames
+            query_params["expansions"] = expansions
+            query_params["fields"] = fields
+
+            query_struct_names = []
+            query_struct_names.append('fields')
+
+            url = self.parser.url("/2/users/by", path_params)
+
+            headers = {}
+
+            response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
+
+            if response.status_code >= 200 and response.status_code < 300:
+                return UserCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")

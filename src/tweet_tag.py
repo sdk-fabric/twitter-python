@@ -9,20 +9,20 @@ from requests import RequestException
 from typing import List
 
 from .fields import Fields
+from .hide_reply import HideReply
 from .hide_reply_response import HideReplyResponse
-from .hide_reply_update import HideReplyUpdate
 from .tweet import Tweet
-from .tweet_collection_response import TweetCollectionResponse
+from .tweet_collection import TweetCollection
 from .tweet_create_response import TweetCreateResponse
 from .tweet_delete_response import TweetDeleteResponse
-from .tweet_entity_response import TweetEntityResponse
+from .tweet_entity import TweetEntity
 
 class TweetTag(sdkgen.TagAbstract):
     def __init__(self, http_client: requests.Session, parser: sdkgen.Parser):
         super().__init__(http_client, parser)
 
 
-    def get_all(self, ids: str, expansions: str, fields: Fields) -> TweetCollectionResponse:
+    def get_all(self, ids: str, expansions: str, fields: Fields) -> TweetCollection:
         """
         Returns a variety of information about the Tweet specified by the requested ID or list of IDs.
         """
@@ -44,14 +44,14 @@ class TweetTag(sdkgen.TagAbstract):
             response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
 
             if response.status_code >= 200 and response.status_code < 300:
-                return TweetCollectionResponse.model_validate_json(json_data=response.content)
+                return TweetCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
         except RequestException as e:
             raise sdkgen.ClientException("An unknown error occurred: " + str(e))
 
-    def get(self, tweet_id: str, expansions: str, fields: Fields) -> TweetEntityResponse:
+    def get(self, tweet_id: str, expansions: str, fields: Fields) -> TweetEntity:
         """
         Returns a variety of information about a single Tweet specified by the requested ID.
         """
@@ -73,7 +73,7 @@ class TweetTag(sdkgen.TagAbstract):
             response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
 
             if response.status_code >= 200 and response.status_code < 300:
-                return TweetEntityResponse.model_validate_json(json_data=response.content)
+                return TweetEntity.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
@@ -132,7 +132,7 @@ class TweetTag(sdkgen.TagAbstract):
         except RequestException as e:
             raise sdkgen.ClientException("An unknown error occurred: " + str(e))
 
-    def hide_reply(self, tweet_id: str, payload: HideReplyUpdate) -> HideReplyResponse:
+    def hide_reply(self, tweet_id: str, payload: HideReply) -> HideReplyResponse:
         """
         Hides or unhides a reply to a Tweet.
         """

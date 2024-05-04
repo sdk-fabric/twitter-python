@@ -8,14 +8,14 @@ import sdkgen
 from requests import RequestException
 from typing import List
 
-from .trends_response import TrendsResponse
+from .trend_collection import TrendCollection
 
 class TrendsTag(sdkgen.TagAbstract):
     def __init__(self, http_client: requests.Session, parser: sdkgen.Parser):
         super().__init__(http_client, parser)
 
 
-    def by_woeid(self, woeid: str) -> TrendsResponse:
+    def get_by_woeid(self, woeid: str) -> TrendCollection:
         """
         The Trends lookup endpoint allow developers to get the Trends for a location, specified using the where-on-earth id (WOEID).
         """
@@ -34,7 +34,7 @@ class TrendsTag(sdkgen.TagAbstract):
             response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
 
             if response.status_code >= 200 and response.status_code < 300:
-                return TrendsResponse.model_validate_json(json_data=response.content)
+                return TrendCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
