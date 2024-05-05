@@ -87,6 +87,9 @@ class UserTag(sdkgen.TagAbstract):
             raise sdkgen.ClientException("An unknown error occurred: " + str(e))
 
     def remove_like(self, user_id: str, tweet_id: str) -> LikeResponse:
+        """
+        Allows a user or authenticated user ID to unlike a Tweet.
+        """
         try:
             path_params = {}
             path_params["user_id"] = user_id
@@ -111,6 +114,9 @@ class UserTag(sdkgen.TagAbstract):
             raise sdkgen.ClientException("An unknown error occurred: " + str(e))
 
     def create_like(self, user_id: str, payload: SingleTweet) -> LikeResponse:
+        """
+        Causes the user ID identified in the path parameter to Like the target Tweet.
+        """
         try:
             path_params = {}
             path_params["user_id"] = user_id
@@ -135,6 +141,9 @@ class UserTag(sdkgen.TagAbstract):
             raise sdkgen.ClientException("An unknown error occurred: " + str(e))
 
     def find_by_name(self, usernames: str, expansions: str, fields: Fields) -> UserCollection:
+        """
+        Returns a variety of information about one or more users specified by their usernames.
+        """
         try:
             path_params = {}
 
