@@ -20,6 +20,9 @@ class UserTag(sdkgen.TagAbstract):
 
 
     def get_timeline(self, user_id: str, start_time: str, end_time: str, since_id: str, until_id: str, exclude: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollection:
+        """
+        Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow. This endpoint can return every Tweet created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
+        """
         try:
             path_params = {}
             path_params["user_id"] = user_id
