@@ -2,7 +2,7 @@
   "type": "client-python",
   "require": {
     "sdkfabric/twitter": {
-      "target": "./src"
+      "target": "./src/sdk"
     }
   }
 }
