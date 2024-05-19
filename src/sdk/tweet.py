@@ -20,4 +20,6 @@ class Tweet(BaseModel):
     reply: Optional[TweetReply] = Field(default=None, alias="reply")
     reply_settings: Optional[str] = Field(default=None, alias="reply_settings")
     text: Optional[str] = Field(default=None, alias="text")
+    possibly_sensitive: Optional[bool] = Field(default=None, alias="possibly_sensitive")
+    lang: Optional[str] = Field(default=None, alias="lang")
     pass
