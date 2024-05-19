@@ -9,6 +9,7 @@ from requests import RequestException
 from typing import List
 
 from .fields import Fields
+from .pagination import Pagination
 from .tweet_collection import TweetCollection
 
 class SearchTag(sdkgen.TagAbstract):
@@ -16,22 +17,19 @@ class SearchTag(sdkgen.TagAbstract):
         super().__init__(http_client, parser)
 
 
-    def get_recent(self, query: str, start_time: str, end_time: str, since_id: str, until_id: str, sort_order: str, expansions: str, max_results: int, fields: Fields) -> TweetCollection:
+    def get_recent(self, query: str, sort_order: str, expansions: str, pagination: Pagination, fields: Fields) -> TweetCollection:
         try:
             path_params = {}
 
             query_params = {}
             query_params["query"] = query
-            query_params["start_time"] = start_time
-            query_params["end_time"] = end_time
-            query_params["since_id"] = since_id
-            query_params["until_id"] = until_id
             query_params["sort_order"] = sort_order
             query_params["expansions"] = expansions
-            query_params["max_results"] = max_results
+            query_params["pagination"] = pagination
             query_params["fields"] = fields
 
             query_struct_names = []
+            query_struct_names.append('pagination')
             query_struct_names.append('fields')
 
             url = self.parser.url("/2/tweets/search/recent", path_params)

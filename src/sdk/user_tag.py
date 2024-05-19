@@ -10,6 +10,7 @@ from typing import List
 
 from .fields import Fields
 from .like_response import LikeResponse
+from .pagination import Pagination
 from .single_tweet import SingleTweet
 from .tweet_collection import TweetCollection
 from .user_collection import UserCollection
@@ -19,7 +20,7 @@ class UserTag(sdkgen.TagAbstract):
         super().__init__(http_client, parser)
 
 
-    def get_timeline(self, user_id: str, start_time: str, end_time: str, since_id: str, until_id: str, exclude: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollection:
+    def get_timeline(self, user_id: str, exclude: str, expansions: str, pagination: Pagination, fields: Fields) -> TweetCollection:
         """
         Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow. This endpoint can return every Tweet created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
         """
@@ -28,17 +29,13 @@ class UserTag(sdkgen.TagAbstract):
             path_params["user_id"] = user_id
 
             query_params = {}
-            query_params["start_time"] = start_time
-            query_params["end_time"] = end_time
-            query_params["since_id"] = since_id
-            query_params["until_id"] = until_id
             query_params["exclude"] = exclude
             query_params["expansions"] = expansions
-            query_params["max_results"] = max_results
-            query_params["pagination_token"] = pagination_token
+            query_params["pagination"] = pagination
             query_params["fields"] = fields
 
             query_struct_names = []
+            query_struct_names.append('pagination')
             query_struct_names.append('fields')
 
             url = self.parser.url("/2/users/:user_id/timelines/reverse_chronological", path_params)

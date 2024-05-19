@@ -16,6 +16,7 @@ from .tweet_collection import TweetCollection
 from .tweet_create_response import TweetCreateResponse
 from .tweet_delete_response import TweetDeleteResponse
 from .tweet_entity import TweetEntity
+from .user_collection import UserCollection
 
 class TweetTag(sdkgen.TagAbstract):
     def __init__(self, http_client: requests.Session, parser: sdkgen.Parser):
@@ -153,6 +154,35 @@ class TweetTag(sdkgen.TagAbstract):
 
             if response.status_code >= 200 and response.status_code < 300:
                 return HideReplyResponse.model_validate_json(json_data=response.content)
+
+
+            raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
+        except RequestException as e:
+            raise sdkgen.ClientException("An unknown error occurred: " + str(e))
+
+    def get_liking_users(self, tweet_id: str, expansions: str, max_results: int, pagination_token: str) -> UserCollection:
+        """
+        Allows you to get information about a Tweet’s liking users.
+        """
+        try:
+            path_params = {}
+            path_params["tweet_id"] = tweet_id
+
+            query_params = {}
+            query_params["expansions"] = expansions
+            query_params["max_results"] = max_results
+            query_params["pagination_token"] = pagination_token
+
+            query_struct_names = []
+
+            url = self.parser.url("/2/tweets/:tweet_id/liking_users", path_params)
+
+            headers = {}
+
+            response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
+
+            if response.status_code >= 200 and response.status_code < 300:
+                return UserCollection.model_validate_json(json_data=response.content)
 
 
             raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")

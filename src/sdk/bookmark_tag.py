@@ -18,7 +18,7 @@ class BookmarkTag(sdkgen.TagAbstract):
         super().__init__(http_client, parser)
 
 
-    def get_all(self, user_id: str, expansions: str, max_results: int, pagination_token: str, fields: Fields) -> TweetCollection:
+    def get_all(self, user_id: str, expansions: str, pagination_token: str, fields: Fields) -> TweetCollection:
         """
         Allows you to get an authenticated user&#039;s 800 most recent bookmarked Tweets.
         """
@@ -28,7 +28,6 @@ class BookmarkTag(sdkgen.TagAbstract):
 
             query_params = {}
             query_params["expansions"] = expansions
-            query_params["max_results"] = max_results
             query_params["pagination_token"] = pagination_token
             query_params["fields"] = fields
 
