@@ -13,12 +13,71 @@ from .like_response import LikeResponse
 from .pagination import Pagination
 from .single_tweet import SingleTweet
 from .tweet_collection import TweetCollection
+from .user import User
 from .user_collection import UserCollection
 
 class UserTag(sdkgen.TagAbstract):
     def __init__(self, http_client: requests.Session, parser: sdkgen.Parser):
         super().__init__(http_client, parser)
 
+
+    def get_all(self, ids: str, expansions: str, fields: Fields) -> UserCollection:
+        """
+        Returns a variety of information about one or more users specified by the requested IDs.
+        """
+        try:
+            path_params = {}
+
+            query_params = {}
+            query_params["ids"] = ids
+            query_params["expansions"] = expansions
+            query_params["fields"] = fields
+
+            query_struct_names = []
+            query_struct_names.append('fields')
+
+            url = self.parser.url("/2/users", path_params)
+
+            headers = {}
+
+            response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
+
+            if response.status_code >= 200 and response.status_code < 300:
+                return UserCollection.model_validate_json(json_data=response.content)
+
+
+            raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
+        except RequestException as e:
+            raise sdkgen.ClientException("An unknown error occurred: " + str(e))
+
+    def get(self, user_id: str, expansions: str, fields: Fields) -> User:
+        """
+        Returns a variety of information about a single user specified by the requested ID.
+        """
+        try:
+            path_params = {}
+            path_params["user_id"] = user_id
+
+            query_params = {}
+            query_params["expansions"] = expansions
+            query_params["fields"] = fields
+
+            query_struct_names = []
+            query_struct_names.append('fields')
+
+            url = self.parser.url("/2/users/:user_id", path_params)
+
+            headers = {}
+
+            response = self.http_client.get(url, headers=headers, params=self.parser.query(query_params, query_struct_names))
+
+            if response.status_code >= 200 and response.status_code < 300:
+                return User.model_validate_json(json_data=response.content)
+
+
+            raise sdkgen.UnknownStatusCodeException("The server returned an unknown status code")
+        except RequestException as e:
+            raise sdkgen.ClientException("An unknown error occurred: " + str(e))
 
     def get_timeline(self, user_id: str, exclude: str, expansions: str, pagination: Pagination, fields: Fields) -> TweetCollection:
         """
