@@ -15,6 +15,7 @@ from .bookmark_tag import BookmarkTag
 from .search_tag import SearchTag
 from .quote_tag import QuoteTag
 from .trends_tag import TrendsTag
+from .retweet_tag import RetweetTag
 
 class Client(sdkgen.ClientAbstract):
     def __init__(self, base_url: str, credentials: sdkgen.CredentialsInterface):
@@ -58,6 +59,12 @@ class Client(sdkgen.ClientAbstract):
 
     def trends(self) -> TrendsTag:
         return TrendsTag(
+            self.http_client,
+            self.parser
+        )
+
+    def retweet(self) -> RetweetTag:
+        return RetweetTag(
             self.http_client,
             self.parser
         )
