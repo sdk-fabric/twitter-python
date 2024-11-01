@@ -7,6 +7,9 @@ import requests
 import sdkgen
 from requests import RequestException
 from typing import List
+from typing import Dict
+from typing import Any
+from urllib.parse import parse_qs
 
 from .tweet_tag import TweetTag
 from .usage_tag import UsageTag
@@ -75,3 +78,7 @@ class Client(sdkgen.ClientAbstract):
     def build(token: str):
         return Client("https://api.twitter.com", sdkgen.HttpBearer(token))
 
+
+    @staticmethod
+    def buildAnonymous():
+        return Client("https://api.twitter.com", sdkgen.Anonymous())
