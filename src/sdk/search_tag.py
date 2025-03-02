@@ -11,6 +11,8 @@ from typing import Dict
 from typing import Any
 from urllib.parse import parse_qs
 
+from .errors import Errors
+from .errors_exception import ErrorsException
 from .fields import Fields
 from .pagination import Pagination
 from .tweet_collection import TweetCollection
@@ -51,6 +53,11 @@ class SearchTag(sdkgen.TagAbstract):
                 return data
 
             statusCode = response.status_code
+            if statusCode >= 0 and statusCode <= 999:
+                data = Errors.model_validate_json(json_data=response.content)
+
+                raise ErrorsException(data)
+
             raise sdkgen.UnknownStatusCodeException('The server returned an unknown status code: ' + str(statusCode))
         except RequestException as e:
             raise sdkgen.ClientException('An unknown error occurred: ' + str(e))
